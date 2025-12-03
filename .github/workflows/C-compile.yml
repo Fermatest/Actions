@@ -1,6 +1,11 @@
 name: compile-and-test-C-program
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      deploy:
+        required: true
+        type: boolean
 
 jobs:
   build:
@@ -38,6 +43,7 @@ jobs:
 
   deploy_dev:
     runs-on: ubuntu-latest
+    if: ${{ !inputs.deploy }}
     needs: [build]
     
     environment: development
@@ -55,6 +61,7 @@ jobs:
 
   deploy_staging:
     runs-on: ubuntu-latest
+    if: ${{ inputs.deploy }}
     needs: [build]
     
     environment: staging
